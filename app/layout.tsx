@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Fredoka, Nunito } from "next/font/google";
 import "./globals.css";
+import { ClickSound } from "@/components/ClickSound";
 
 /** Fredoka carries every name, numeral and label — it is the only face with the plush set's roundness. */
 const display = Fredoka({
@@ -23,7 +24,10 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${display.variable} ${body.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <ClickSound />
+        {children}
+      </body>
     </html>
   );
 }

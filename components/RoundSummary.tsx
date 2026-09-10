@@ -1,11 +1,37 @@
 "use client";
 
+import { CSSProperties, useEffect, useState } from "react";
 import { GameState } from "@/lib/types";
 import { scoreBreakdown, makiIconCount, scoreMaki, scorePudding } from "@/lib/scoring";
 import { debrief } from "@/lib/analysis";
 import { CardIcon } from "./icons";
+import { StartOver } from "./StartOver";
 
 const fmt = (n: number) => (Number.isInteger(n) ? String(n) : n.toFixed(1));
+
+/** The payoff: the round's points land on the running total instead of appearing there. */
+function Tally({ from, to }: { from: number; to: number }) {
+  const [n, setN] = useState(from);
+
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setN(to);
+      return;
+    }
+    let raf = 0;
+    const t0 = performance.now();
+    const step = (t: number) => {
+      const p = Math.min(1, (t - t0) / 900);
+      setN(p < 1 ? from + (to - from) * (1 - Math.pow(1 - p, 3)) : to);
+      if (p < 1) raf = requestAnimationFrame(step);
+    };
+    raf = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(raf);
+  }, [from, to]);
+
+  // Mid-flight the numeral stays whole; only the settled total shows a half point.
+  return <>{n === to ? fmt(to) : Math.round(n)}</>;
+}
 
 export function RoundSummary({
   state,
@@ -23,6 +49,16 @@ export function RoundSummary({
   const coaching = debrief(state);
   const roundIndex = state.round - 1;
 
+  // Round 1 ends with one ding, round 2 with two, round 3 with three.
+  useEffect(() => {
+    const dings = state.round;
+    for (let i = 0; i < dings; i++) {
+      const el = new Audio("/ding.mp3");
+      el.volume = 0.1;
+      setTimeout(() => void el.play().catch(() => {}), i * 150);
+    }
+  }, [state.round]);
+
   return (
     <div className="flex min-h-screen flex-col items-center px-4 py-8 sm:px-6">
       <div className="w-full max-w-3xl">
@@ -31,16 +67,7 @@ export function RoundSummary({
             {isGameEnd ? "Dessert" : `Round ${["I", "II", "III"][roundIndex]} scored`}
           </h2>
           {!isGameEnd && (
-            <button
-              type="button"
-              onClick={() => {
-                if (window.confirm("Start a new game? This ends the current one.")) onRestart();
-              }}
-              className="mt-2 shrink-0 rounded-full px-3.5 py-2 text-[0.7rem] font-bold tracking-wide uppercase"
-              style={{ color: "var(--ink-soft)", boxShadow: "inset 0 0 0 2.5px var(--ink-faint)" }}
-            >
-              Start over
-            </button>
+            <StartOver onRestart={onRestart} className="mt-2" />
           )}
         </div>
 
@@ -74,11 +101,16 @@ export function RoundSummary({
               </tr>
             </thead>
             <tbody>
-              {ranked.map((p) => {
+              {ranked.map((p, i) => {
                 const b = scoreBreakdown(p.collection);
                 const roundScore = p.roundScores[roundIndex] ?? 0;
+                const before = p.totalScore - roundScore - (pudding?.[p.id] ?? 0);
                 return (
-                  <tr key={p.id} style={{ borderTop: "2px solid var(--well)" }}>
+                  <tr
+                    key={p.id}
+                    className="rise"
+                    style={{ borderTop: "2px solid var(--well)", "--i": i } as CSSProperties}
+                  >
                     <td
                       className="display px-2 py-2.5 text-left font-bold whitespace-nowrap"
                       style={{ color: p.id === "human" ? "var(--ink)" : "var(--ink-soft)" }}
@@ -113,7 +145,7 @@ export function RoundSummary({
                       {fmt(roundScore)}
                     </td>
                     <td className="display px-2 py-2.5 text-right text-lg font-bold" style={{ color: "var(--coral)" }}>
-                      {fmt(p.totalScore)}
+                      <Tally from={before} to={p.totalScore} />
                     </td>
                   </tr>
                 );

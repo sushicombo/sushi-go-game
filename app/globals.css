@@ -133,6 +133,7 @@ body {
 
 .seat {
   animation: seat 280ms cubic-bezier(0.33, 1, 0.68, 1) both;
+  animation-delay: var(--seat-delay, 0ms);
 }
 
 @keyframes lamp {
@@ -151,9 +152,172 @@ body {
   animation: lamp 1.6s ease-in-out infinite;
 }
 
+/* ---------------------------------------------------------------
+ * Motion. The pass is the game: the card you drafted lifts onto your
+ * tray, the rest of your hand travels left to your neighbour, and the
+ * hand you were passed arrives from the right. Opponents seat their
+ * picks in seat order, so the pass is visibly going round the table.
+ * Transform and opacity only; the world settles, it never bounces.
+ * --------------------------------------------------------------- */
+
+/* The hand you just passed, leaving to the left. */
+@keyframes pass-out {
+  to {
+    transform: translateX(-150%) rotate(-5deg);
+    opacity: 0;
+  }
+}
+
+/* The hand your right-hand neighbour just passed you. */
+@keyframes pass-in {
+  from {
+    transform: translateX(45%);
+    opacity: 0;
+  }
+}
+
+/* The card you kept: it lifts off the rail, then is set down onto your tray.
+ * Stays inside the rail's bounds — the rail scrolls, so anything that leaves it
+ * vertically would be clipped mid-flight. */
+@keyframes serve-up {
+  30% {
+    transform: translateY(-9px) scaleY(1.06);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(6px) scale(0.55);
+    opacity: 0;
+  }
+}
+
+.pass-out {
+  animation: pass-out 260ms cubic-bezier(0.5, 0, 0.75, 0) both;
+  animation-delay: calc(var(--i, 0) * 22ms);
+}
+
+.pass-in {
+  animation: pass-in 320ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: calc(var(--i, 0) * 28ms);
+}
+
+.serve-up {
+  animation: serve-up 420ms cubic-bezier(0.33, 1, 0.68, 1) both;
+}
+
+/* Chopsticks: the play the game is named after gets a stamp. */
+@keyframes stamp {
+  0% {
+    transform: scale(1.7) rotate(-9deg);
+    opacity: 0;
+  }
+  40% {
+    transform: scale(0.94) rotate(-4deg);
+    opacity: 1;
+  }
+  70% {
+    transform: scale(1) rotate(-4deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) rotate(-4deg);
+    opacity: 0;
+  }
+}
+
+.stamp {
+  animation: stamp 700ms cubic-bezier(0.33, 1, 0.68, 1) both;
+}
+
+/* A numeral that just changed. */
+@keyframes pop {
+  0% {
+    transform: scale(0.72);
+  }
+  60% {
+    transform: scale(1.09);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.pop {
+  animation: pop 260ms cubic-bezier(0.33, 1, 0.68, 1) both;
+}
+
+/* Scoreboard rows landing one after another. */
+@keyframes rise {
+  from {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+}
+
+.rise {
+  animation: rise 380ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: calc(var(--i, 0) * 55ms);
+}
+
+/* The well arming: one flex the moment the coral outline appears. */
+@keyframes arm {
+  40% {
+    transform: scale(1.025);
+  }
+}
+
+.well-threat {
+  animation: arm 420ms cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+/* The hand scrolls as one row at every width; its scrollbar stays out of the way. */
+.hand-rail {
+  scrollbar-width: thin;
+  scrollbar-color: var(--ink-faint) transparent;
+}
+
+.hand-rail::-webkit-scrollbar {
+  height: 8px;
+}
+
+.hand-rail::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.hand-rail::-webkit-scrollbar-thumb {
+  background: var(--ink-faint);
+  border: 2px solid var(--card);
+}
+
+/* The confirm dialog: a plush card floating over a dimmed table. */
+dialog.confirm {
+  margin: auto;
+  width: min(24rem, calc(100vw - 2rem));
+  padding: 1.5rem;
+  border: 0;
+  color: var(--ink);
+}
+
+dialog.confirm::backdrop {
+  background: rgba(47, 62, 68, 0.45);
+}
+
+dialog.confirm[open] {
+  animation: pop 220ms cubic-bezier(0.33, 1, 0.68, 1) both;
+}
+
+/* Reduced motion: no travel, no squash. Every element's resting state is its
+ * natural one, so killing the animation leaves the meaning (and the card) intact. */
 @media (prefers-reduced-motion: reduce) {
   .seat,
-  .lamp {
+  .lamp,
+  .pass-out,
+  .pass-in,
+  .serve-up,
+  .stamp,
+  .pop,
+  .rise,
+  .well-threat,
+  dialog.confirm[open] {
     animation: none;
   }
 }
