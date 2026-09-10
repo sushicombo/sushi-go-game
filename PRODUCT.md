@@ -37,7 +37,7 @@ Played solo in short sessions on both desktop and phone with full parity — des
 
 ## Brand Commitments
 
-The name "Sushi Go!" and the card, ingredient, and mechanic terminology from the official rulebook are fixed and must be used verbatim. The player asked that the game evoke the feel of the original physical board game.
+The app is named "Sushi Combo" (not "Sushi Go!", to avoid trademark confusion with the physical product it trains against). The card, ingredient, and mechanic terminology from the official rulebook are fixed and must be used verbatim. The player asked that the game evoke the feel of the original physical board game.
 
 ## Evidence on Hand
 

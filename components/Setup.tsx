@@ -22,7 +22,7 @@ export function Setup({ onStart }: { onStart: (numPlayers: number, difficulty: D
       <div className="w-full max-w-md">
         <h1 className="display text-7xl leading-[0.9] font-black tracking-tight sm:text-8xl" style={{ color: "var(--ink)" }}>
           Sushi
-          <span style={{ color: "var(--coral)" }}> Go!</span>
+          <span style={{ color: "var(--coral)" }}> Combo</span>
         </h1>
         <p className="mt-3 text-sm leading-relaxed" style={{ color: "var(--ink-soft)" }}>
           Three rounds. Everything you pass goes to the player on your left. Learn to read what they

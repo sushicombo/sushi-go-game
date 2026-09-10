@@ -1,6 +1,6 @@
 import { GameState } from "./types";
 
-const KEY = "sushi-go-save";
+const KEY = "sushi-combo-save";
 
 export function saveGame(state: GameState) {
   try {

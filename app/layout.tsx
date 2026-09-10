@@ -16,8 +16,8 @@ const body = Nunito({
 });
 
 export const metadata: Metadata = {
-  title: "Sushi Go!",
-  description: "Play Sushi Go! solo against bots and learn to read the table.",
+  title: "Sushi Combo",
+  description: "Play Sushi Combo solo against bots and learn to read the table.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

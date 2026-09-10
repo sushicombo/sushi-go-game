@@ -283,7 +283,7 @@ export function GameBoard({
               }}
               aria-pressed={chopsticksMode}
             >
-              Sushi Go! <span className="hidden sm:inline">— use chopsticks</span>
+              Sushi Combo <span className="hidden sm:inline">— use chopsticks</span>
               <span className="sm:hidden">— take two</span>
             </button>
           )}

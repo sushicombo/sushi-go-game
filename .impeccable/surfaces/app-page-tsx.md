@@ -5,7 +5,7 @@ primary_target: "app/page.tsx"
 related_targets: ["components/GameBoard.tsx","components/Setup.tsx","components/RoundSummary.tsx","components/Card.tsx","components/icons.tsx"]
 ---
 
-Scope: the Sushi Go! game surface — setup, board, round debrief, final results. Visitor mode: Operate.
+Scope: the Sushi Combo game surface — setup, board, round debrief, final results. Visitor mode: Operate.
 
 Audience: one player training alone against bots, reading opponents' boards to learn blocking. Task: draft one card per turn while scanning every opponent's collection. Constraint: full desktop and mobile parity; no coaching during the draft.
 
