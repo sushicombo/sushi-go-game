@@ -38,9 +38,9 @@ interface Tier {
 const TIERS: Record<Difficulty, Tier> = {
   easy: { projects: false, counts: false, denial: 0, targets: false, races: false, pairs: false },
   normal: { projects: false, counts: false, denial: 0, targets: false, races: false, pairs: false },
-  hard: { projects: true, counts: false, denial: 0, targets: false, races: true, pairs: false },
+  hard: { projects: true, counts: false, denial: 0.15, targets: false, races: true, pairs: false },
   "very-hard": { projects: true, counts: true, denial: 0.35, targets: false, races: true, pairs: true },
-  extreme: { projects: true, counts: true, denial: 0.35, targets: true, races: true, pairs: true },
+  extreme: { projects: true, counts: true, denial: 0.4, targets: true, races: true, pairs: true },
 };
 
 function count(cards: Card[], type: CardType): number {
@@ -168,8 +168,9 @@ function valueFor(
     if (card.type === "pudding") {
       const others = opponents.map((o) => o.puddings.length);
       const mine = player.puddings.length;
-      // Pudding only cashes out after round three, so earlier rounds discount it.
-      const weight = [0, 0.45, 0.7, 1][Math.min(ctx.round, 3)];
+      // Pudding only cashes out after round three; a human skips it round one and
+      // prioritizes it hard once few rounds remain to close the gap.
+      const weight = [0, 0.15, 0.65, 1][Math.min(ctx.round, 3)];
       value += (puddingPoints(mine + 1, others) - puddingPoints(mine, others)) * weight;
     }
   } else if (card.type === "pudding") {
@@ -199,7 +200,7 @@ function denialValue(card: Card, self: Player, ctx: BotContext, tier: Tier): num
     // The next seat sees the card first, so denying them is worth the most.
     let weight = Math.pow(0.55, i);
     // Blocking the player who is beating you is worth more than blocking the one who is not.
-    if (tier.targets) weight *= 1 + Math.max(0, standing(opp) - mine) / 12;
+    if (tier.targets) weight *= 1 + Math.max(0, standing(opp) - mine) / 10;
     total += Math.max(0, gain) * weight;
   });
   return total * tier.denial;
