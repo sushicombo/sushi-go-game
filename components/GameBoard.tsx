@@ -7,6 +7,7 @@ import { makiIconCount, scoreCollection } from "@/lib/scoring";
 import { isAlarming, threats } from "@/lib/analysis";
 import { CardView, PlateChip } from "./Card";
 import { StartOver } from "./StartOver";
+import { Settings } from "./Settings";
 
 function group(cards: Card[]): { type: CardType; count: number }[] {
   const counts = new Map<CardType, number>();
@@ -227,17 +228,15 @@ export function GameBoard({
     <div className="flex min-h-screen flex-col">
       <header className="mx-auto flex w-full max-w-[1500px] flex-wrap items-center justify-between gap-x-2 gap-y-2 px-3 pt-3 pb-2 sm:gap-3 sm:px-6 sm:pt-4 sm:pb-3">
         <RoundSpine round={state.round} handLeft={human.hand.length} handSize={state.handSize} />
-        <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
+        <div className="flex shrink-0 items-end gap-1.5 sm:gap-2">
+          <Settings />
           <StartOver onRestart={onRestart} />
           <button
             type="button"
             onClick={() => setShowThreats((v) => !v)}
-            className="shrink-0 rounded-full px-2.5 py-1.5 text-[0.62rem] font-bold tracking-wide whitespace-nowrap uppercase sm:px-3.5 sm:py-2 sm:text-[0.7rem]"
-            style={{
-              color: showThreats ? "var(--on-coral)" : "var(--ink-soft)",
-              background: showThreats ? "var(--coral)" : "transparent",
-              boxShadow: `inset 0 0 0 2.5px ${showThreats ? "var(--ink)" : "var(--ink-faint)"}`,
-            }}
+            className={`btn btn-thin display mb-0.5 shrink-0 px-4 py-2 text-xs font-bold whitespace-nowrap sm:px-5 sm:py-2.5 sm:text-sm ${
+              showThreats ? "" : "btn-quiet"
+            }`}
             aria-pressed={showThreats}
           >
             <span className="hidden sm:inline">Threat read </span>
@@ -297,12 +296,9 @@ export function GameBoard({
                 setSelected([]);
               }}
               disabled={thinking}
-              className="shrink-0 rounded-full px-2.5 py-1.5 text-[0.62rem] font-bold tracking-wide whitespace-nowrap uppercase disabled:opacity-50 sm:px-3.5 sm:py-2 sm:text-[0.7rem]"
-              style={{
-                color: chopsticksMode ? "var(--on-coral)" : "var(--ink)",
-                background: chopsticksMode ? "var(--coral)" : "var(--well)",
-                boxShadow: "inset 0 0 0 2.5px var(--ink)",
-              }}
+              className={`btn btn-thin display mb-0.5 shrink-0 px-4 py-2 text-xs font-bold whitespace-nowrap sm:px-5 sm:py-2.5 sm:text-sm ${
+                chopsticksMode ? "" : "btn-quiet"
+              }`}
               aria-pressed={chopsticksMode}
             >
               Sushi Combo <span className="hidden sm:inline">— use chopsticks</span>

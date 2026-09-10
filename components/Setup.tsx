@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Difficulty } from "@/lib/types";
+import { Settings } from "./Settings";
 
 const DIFFICULTY_NOTE: Record<Difficulty, string> = {
   easy: "Drafts at random. Good for learning the shape of a round.",
@@ -20,6 +21,9 @@ export function Setup({ onStart }: { onStart: (numPlayers: number, difficulty: D
   return (
     <div className="flex min-h-screen flex-col items-center justify-center px-5 py-12">
       <div className="w-full max-w-md">
+        <div className="mb-4 flex justify-end">
+          <Settings />
+        </div>
         <h1 className="display text-7xl leading-[0.9] font-black tracking-tight sm:text-8xl" style={{ color: "var(--ink)" }}>
           Sushi
           <span style={{ color: "var(--coral)" }}> Combo!</span>

@@ -6,6 +6,8 @@ import { scoreBreakdown, makiIconCount, scoreMaki, scorePudding } from "@/lib/sc
 import { debrief } from "@/lib/analysis";
 import { CardIcon } from "./icons";
 import { StartOver } from "./StartOver";
+import { Settings } from "./Settings";
+import { play } from "@/lib/sound";
 
 const fmt = (n: number) => (Number.isInteger(n) ? String(n) : n.toFixed(1));
 
@@ -51,12 +53,10 @@ export function RoundSummary({
 
   // Round 1 ends with one ding, round 2 with two, round 3 with three.
   useEffect(() => {
-    const dings = state.round;
-    for (let i = 0; i < dings; i++) {
-      const el = new Audio("/ding.mp3");
-      el.volume = 0.1;
-      setTimeout(() => void el.play().catch(() => {}), i * 150);
-    }
+    const timers = Array.from({ length: state.round }, (_, i) =>
+      setTimeout(() => play("/ding.mp3", 0.1), i * 150)
+    );
+    return () => timers.forEach(clearTimeout);
   }, [state.round]);
 
   return (
@@ -66,9 +66,10 @@ export function RoundSummary({
           <h2 className="display text-5xl leading-none font-black tracking-tight sm:text-6xl" style={{ color: "var(--ink)" }}>
             {isGameEnd ? "Dessert" : `Round ${["I", "II", "III"][roundIndex]} scored`}
           </h2>
-          {!isGameEnd && (
-            <StartOver onRestart={onRestart} className="mt-2" />
-          )}
+          <div className="mt-2 flex shrink-0 items-center gap-1.5 sm:gap-2">
+            <Settings />
+            {!isGameEnd && <StartOver onRestart={onRestart} />}
+          </div>
         </div>
 
         {isGameEnd && (

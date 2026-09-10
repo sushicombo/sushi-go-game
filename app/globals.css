@@ -111,6 +111,20 @@ body {
     0 5px 0 rgba(47, 62, 68, 0.15);
 }
 
+/* Sized to the gear icon's own weights: a 2px outline over a 3px ink block. */
+.btn-thin {
+  box-shadow:
+    inset 0 0 0 2px var(--ink),
+    0 3px 0 var(--ink);
+}
+
+.btn-thin:active:not(:disabled) {
+  transform: translateY(3px);
+  box-shadow:
+    inset 0 0 0 2px var(--ink),
+    0 0 0 var(--ink);
+}
+
 .btn-quiet {
   background: var(--card);
   color: var(--ink);

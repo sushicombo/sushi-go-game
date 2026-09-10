@@ -11,8 +11,7 @@ export function StartOver({ onRestart, className = "" }: { onRestart: () => void
       <button
         type="button"
         onClick={() => dialog.current?.showModal()}
-        className={`shrink-0 rounded-full px-2.5 py-1.5 text-[0.62rem] font-bold tracking-wide whitespace-nowrap uppercase sm:px-3.5 sm:py-2 sm:text-[0.7rem] ${className}`}
-        style={{ color: "var(--ink-soft)", boxShadow: "inset 0 0 0 2.5px var(--ink-faint)" }}
+        className={`btn btn-thin btn-quiet display mb-0.5 shrink-0 px-4 py-2 text-xs font-bold whitespace-nowrap sm:px-5 sm:py-2.5 sm:text-sm ${className}`}
       >
         Start over
       </button>
