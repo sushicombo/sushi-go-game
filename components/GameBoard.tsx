@@ -20,27 +20,33 @@ function sortForDisplay(cards: Card[]): Card[] {
 
 function RoundSpine({ round, handLeft, handSize }: { round: number; handLeft: number; handSize: number }) {
   return (
-    <div className="flex items-center gap-5">
-      <div className="flex items-baseline gap-2">
+    <div className="flex items-center gap-4">
+      {/* Three rounds as three plush pips; the current one fills coral. */}
+      <div className="flex items-center gap-1.5">
         {[1, 2, 3].map((r) => (
           <span
             key={r}
-            className="display text-3xl leading-none sm:text-4xl"
+            className="display flex h-8 w-8 items-center justify-center rounded-full text-sm leading-none font-bold sm:h-9 sm:w-9 sm:text-base"
             style={{
-              color: r === round ? "var(--gold-bright)" : r < round ? "var(--cedar-pale)" : "rgba(138,115,96,0.35)",
-              fontWeight: r === round ? 900 : 400,
+              background: r === round ? "var(--coral)" : r < round ? "var(--card)" : "transparent",
+              color: r === round ? "var(--on-coral)" : r < round ? "var(--ink)" : "var(--ink-faint)",
+              boxShadow: `inset 0 0 0 3px ${r > round ? "var(--ink-faint)" : "var(--ink)"}`,
             }}
           >
             {["I", "II", "III"][r - 1]}
           </span>
         ))}
       </div>
-      <div className="flex items-center gap-[3px]" aria-label={`${handLeft} of ${handSize} cards left in hand`}>
+      {/* The hand visibly depletes: one bead per card still to draft. */}
+      <div className="flex items-center gap-1" aria-label={`${handLeft} of ${handSize} cards left in hand`}>
         {Array.from({ length: handSize }).map((_, i) => (
           <span
             key={i}
-            className="h-3 w-[3px] rounded-full transition-colors duration-300"
-            style={{ background: i < handLeft ? "var(--gold)" : "rgba(58,42,34,0.15)" }}
+            className="h-2.5 w-2.5 rounded-full transition-colors duration-300"
+            style={{
+              background: i < handLeft ? "var(--ink)" : "transparent",
+              boxShadow: i < handLeft ? "none" : "inset 0 0 0 2px var(--ink-faint)",
+            }}
           />
         ))}
       </div>
@@ -72,36 +78,43 @@ function Well({
 
   return (
     <section
-      className={`flex flex-col rounded-lg ${own ? "flex-1 gap-3 p-4 sm:flex-none" : "gap-2 p-3"} ${
+      className={`flex flex-col ${own ? "flex-1 gap-3 p-4" : "gap-2 p-3"} ${
         isAlarming(alerts) ? "well well-threat" : "well"
       } ${className}`}
     >
-      <header className="flex items-baseline justify-between gap-2">
+      <header className="flex items-center justify-between gap-2">
         <h3
-          className={`display truncate font-bold leading-none ${own ? "text-xl" : "text-sm"}`}
-          style={{ color: own ? "var(--rice)" : "var(--rice-dim)" }}
+          className={`display truncate leading-none font-bold ${own ? "text-xl" : "text-sm"}`}
+          style={{ color: "var(--ink)" }}
         >
           {player.name}
         </h3>
-        <div className="flex shrink-0 items-baseline gap-2">
+        <div className="flex shrink-0 items-center gap-2">
           {maki > 0 && (
-            <span className="text-[0.65rem] font-semibold" style={{ color: "var(--cedar-pale)" }}>
+            <span className="text-[0.65rem] font-bold" style={{ color: "var(--ink-soft)" }}>
               {maki} maki
             </span>
           )}
           {puddings > 0 && (
-            <span className="text-[0.65rem] font-semibold" style={{ color: "var(--cedar-pale)" }}>
+            <span className="text-[0.65rem] font-bold" style={{ color: "var(--ink-soft)" }}>
               {puddings} pud
             </span>
           )}
           {player.totalScore > 0 && (
-            <span className="text-[0.65rem] font-semibold" style={{ color: "var(--cedar-pale)" }}>
+            <span className="text-[0.65rem] font-bold" style={{ color: "var(--ink-soft)" }}>
               {player.totalScore} banked
             </span>
           )}
+          {/* The running score is the one numeral that always reads: a filled ink pill. */}
           <span
-            className={`display font-bold leading-none ${own ? "text-2xl" : "text-base"}`}
-            style={{ color: provisional > 0 ? "var(--gold-bright)" : "rgba(201,162,39,0.35)" }}
+            className={`display flex items-center justify-center rounded-full leading-none font-bold ${
+              own ? "h-9 min-w-9 px-2 text-lg" : "h-7 min-w-7 px-1.5 text-sm"
+            }`}
+            style={{
+              background: provisional > 0 ? "var(--ink)" : "transparent",
+              color: provisional > 0 ? "var(--card)" : "var(--ink-faint)",
+              boxShadow: provisional > 0 ? "none" : "inset 0 0 0 2.5px var(--ink-faint)",
+            }}
             title="Points on the table this round, before maki and pudding"
           >
             {provisional}
@@ -111,8 +124,8 @@ function Well({
 
       <div className={`flex flex-wrap ${own ? "gap-2" : "gap-1"}`}>
         {player.collection.length === 0 && (
-          <span className="text-[0.7rem] italic" style={{ color: "rgba(138,115,96,0.6)" }}>
-            {thinking ? "drafting…" : own ? "your compartment is empty" : "empty"}
+          <span className="text-[0.7rem] font-semibold" style={{ color: "var(--ink-faint)" }}>
+            {thinking ? "drafting…" : own ? "nothing on your plate yet" : "empty"}
           </span>
         )}
         {!own && plates.map((p) => <PlateChip key={p.type} type={p.type} count={p.count} />)}
@@ -137,13 +150,13 @@ function Well({
       {alerts.length > 0 && (
         <ul className="mt-auto flex flex-wrap gap-x-3 gap-y-1 pt-1">
           {alerts.map((a) => (
-            <li key={a.label} className="flex items-center gap-1.5 text-[0.68rem] font-semibold">
+            <li key={a.label} className="flex items-center gap-1.5 text-[0.68rem] font-bold">
               <span
-                className={`h-1.5 w-1.5 rounded-full ${a.points >= 9 ? "lamp" : ""}`}
-                style={{ background: a.points >= 9 ? "var(--vermilion)" : "var(--cedar-pale)" }}
+                className={`h-2 w-2 rounded-full ${a.points >= 9 ? "lamp" : ""}`}
+                style={{ background: a.points >= 9 ? "var(--coral)" : "var(--ink-faint)" }}
               />
-              <span style={{ color: a.points >= 9 ? "var(--vermilion-text)" : "var(--rice-dim)" }}>
-                {a.label} <span style={{ color: "var(--cedar-pale)" }}>+{a.points}</span>
+              <span style={{ color: a.points >= 9 ? "var(--coral-deep)" : "var(--ink-soft)" }}>
+                {a.label} <span style={{ color: "var(--ink-faint)" }}>+{a.points}</span>
               </span>
             </li>
           ))}
@@ -197,7 +210,7 @@ export function GameBoard({
   }
 
   return (
-    <div className="tray flex min-h-screen flex-col">
+    <div className="flex min-h-screen flex-col">
       <header className="mx-auto flex w-full max-w-[1500px] flex-wrap items-center justify-between gap-3 px-4 pt-4 pb-3 sm:px-6">
         <RoundSpine round={state.round} handLeft={human.hand.length} handSize={state.handSize} />
         <div className="flex items-center gap-2">
@@ -206,19 +219,19 @@ export function GameBoard({
             onClick={() => {
               if (window.confirm("Start a new game? This ends the current one.")) onRestart();
             }}
-            className="rounded-full px-3 py-1.5 text-[0.7rem] font-semibold tracking-wide uppercase transition-colors"
-            style={{ color: "var(--rice-dim)", boxShadow: "inset 0 0 0 1px rgba(176,138,94,0.4)" }}
+            className="rounded-full px-3.5 py-2 text-[0.7rem] font-bold tracking-wide uppercase"
+            style={{ color: "var(--ink-soft)", boxShadow: "inset 0 0 0 2.5px var(--ink-faint)" }}
           >
             Start over
           </button>
           <button
             type="button"
             onClick={() => setShowThreats((v) => !v)}
-            className="rounded-full px-3 py-1.5 text-[0.7rem] font-semibold tracking-wide uppercase transition-colors"
+            className="rounded-full px-3.5 py-2 text-[0.7rem] font-bold tracking-wide uppercase"
             style={{
-              color: showThreats ? "var(--rice)" : "var(--rice-dim)",
-              background: showThreats ? "var(--gold)" : "transparent",
-              boxShadow: showThreats ? "none" : "inset 0 0 0 1px rgba(176,138,94,0.4)",
+              color: showThreats ? "var(--on-coral)" : "var(--ink-soft)",
+              background: showThreats ? "var(--coral)" : "transparent",
+              boxShadow: `inset 0 0 0 2.5px ${showThreats ? "var(--ink)" : "var(--ink-faint)"}`,
             }}
             aria-pressed={showThreats}
           >
@@ -227,10 +240,8 @@ export function GameBoard({
         </div>
       </header>
 
-      <div className="gold-rule mx-auto h-px w-full max-w-[1500px]" />
-
-      <main className="mx-auto flex w-full max-w-[1500px] flex-1 flex-col justify-start gap-2.5 px-4 pt-2 pb-4 sm:gap-3 sm:px-6 sm:pt-3">
-        <div className="tray-body flex flex-1 flex-col gap-2 rounded-2xl p-2.5 sm:flex-none sm:gap-3 sm:p-3.5">
+      <main className="mx-auto flex w-full max-w-[1500px] flex-1 flex-col justify-start gap-2.5 px-4 pt-1 pb-4 sm:gap-3 sm:px-6">
+        <div className="flex flex-1 flex-col gap-2 sm:gap-3">
           <div className={`grid gap-2 sm:gap-3 ${oppCols}`}>
             {opponents.map((p, i) => (
               <Well
@@ -247,9 +258,9 @@ export function GameBoard({
         </div>
       </main>
 
-      <footer className="rail sticky bottom-0 flex flex-col gap-3 px-4 py-3 sm:px-6" style={{ boxShadow: "0 -8px 24px rgba(0,0,0,0.5)" }}>
+      <footer className="rail sticky bottom-0 flex flex-col gap-3 px-4 py-3 sm:px-6">
         <div className="mx-auto flex w-full max-w-[1500px] items-center justify-between gap-3">
-          <p className="display text-sm font-bold" style={{ color: "var(--rice)" }}>
+          <p className="display text-sm font-bold" style={{ color: "var(--ink)" }}>
             {isFinalCard
               ? "Last card — it goes straight to your tray"
               : chopsticksMode
@@ -264,10 +275,11 @@ export function GameBoard({
                 setSelected([]);
               }}
               disabled={thinking}
-              className="rounded-full px-3 py-1.5 text-[0.7rem] font-bold tracking-wide uppercase transition-colors disabled:opacity-50"
+              className="rounded-full px-3.5 py-2 text-[0.7rem] font-bold tracking-wide uppercase disabled:opacity-50"
               style={{
-                color: chopsticksMode ? "var(--accent-ink)" : "var(--rice)",
-                background: chopsticksMode ? "var(--vermilion-fill)" : "rgba(58,42,34,0.08)",
+                color: chopsticksMode ? "var(--on-coral)" : "var(--ink)",
+                background: chopsticksMode ? "var(--coral)" : "var(--well)",
+                boxShadow: "inset 0 0 0 2.5px var(--ink)",
               }}
               aria-pressed={chopsticksMode}
             >
@@ -294,12 +306,7 @@ export function GameBoard({
             type="button"
             onClick={confirm}
             disabled={!ready || thinking}
-            className="display w-full shrink-0 rounded-lg px-5 py-3.5 text-base font-bold transition-opacity disabled:opacity-40 sm:w-auto sm:self-center sm:px-7"
-            style={{
-              background: "var(--vermilion-fill)",
-              color: "var(--accent-ink)",
-              boxShadow: "0 3px 0 rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.18)",
-            }}
+            className="btn display mb-1 w-full shrink-0 px-5 py-3.5 text-base font-bold sm:w-auto sm:self-center sm:px-8"
           >
             {thinking ? "…" : isFinalCard ? "Take it" : "Serve"}
           </button>

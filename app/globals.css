@@ -1,197 +1,194 @@
 @import "tailwindcss";
 
+/*
+ * The plush world. Flat fills, one cold charcoal ink, depth by solid offset.
+ * Nothing here gradients, blurs, or floats — if it looks lifted, it is lifted
+ * by an ink block underneath it.
+ */
 :root {
-  --lacquer: #fbf3e3;
-  --lacquer-deep: #efe0bf;
-  --lacquer-rim: #e3cfa0;
-  --lacquer-edge: #cbb083;
+  --ink: #2f3e44;
+  --ink-soft: #5c6f77;
+  --ink-faint: #94a3a8;
 
-  --vermilion: #e2593c;
-  --vermilion-fill: #d14a30;
-  --vermilion-text: #c23f22;
+  /* Cards are cream; the ground is a shade deeper so they separate without a shadow. */
+  --ground: #ede2cc;
+  --card: #fbf0de;
+  --well: #e4d6bb;
 
-  --gold: #c9962a;
-  --gold-bright: #a8791c;
+  --coral: #ee5a47;
+  --coral-deep: #d8442f;
+  --coral-pale: #f9c4b6;
 
-  --rice: #3a2a22;
-  --rice-dim: #8a7360;
+  --wheat: #e7d2a2;
+  --nori: #3c5a52;
+  --yolk: #f7c64b;
+  --yolk-deep: #c99a20;
+  --leaf: #8fc05c;
+  --wood: #d9a05b;
 
-  --cedar: #8a6142;
-  --cedar-light: #ab7f52;
-  --cedar-pale: #96714a;
-
-  --seaweed: #3a534c;
-
-  /** Fixed light ink for text on saturated accent fills (vermilion/gold buttons) — stays cream in both themes since the fills themselves don't change. */
-  --accent-ink: #fbf2e4;
+  /* Ink on a saturated fill stays cream in every context; the fills never change. */
+  --on-coral: #fff6ef;
 }
 
 @theme inline {
-  --color-background: var(--lacquer);
-  --color-foreground: var(--rice);
-  --font-sans: var(--font-archivo);
-  --font-display: var(--font-mincho);
+  --color-background: var(--ground);
+  --color-foreground: var(--ink);
+  --font-sans: var(--font-body);
+  --font-display: var(--font-display);
 }
 
 html {
-  background: var(--lacquer);
+  background: var(--ground);
 }
 
 body {
-  background: var(--lacquer);
-  color: var(--rice);
-  font-family: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--font-body), ui-rounded, ui-sans-serif, system-ui, sans-serif;
   font-variant-numeric: tabular-nums;
   -webkit-tap-highlight-color: transparent;
 }
 
-/* The tray: a paper ground with one soft overhead sheen. */
-.tray {
-  background:
-    radial-gradient(120% 80% at 50% -10%, #fffdf6 0%, rgba(255, 253, 246, 0) 60%),
-    var(--lacquer);
-}
-
-/* The tray body: a light wooden box with a thin rim. Wells are cut into it. */
-.tray-body {
-  background: linear-gradient(180deg, #f3e4c8 0%, #ecd9b4 100%);
-  border: 1px solid rgba(138, 97, 66, 0.25);
-  box-shadow:
-    0 16px 40px rgba(120, 90, 50, 0.16),
-    inset 0 1px 0 rgba(255, 255, 255, 0.6);
-}
-
-/* Compartments are cut into the tray, never floated above it. */
-.well {
-  background: var(--lacquer-deep);
-  border: 1px solid var(--lacquer-edge);
-  box-shadow:
-    inset 0 2px 6px rgba(120, 90, 50, 0.14),
-    inset 0 -1px 0 rgba(255, 250, 240, 0.5);
-}
-
-.well-threat {
-  border-color: var(--vermilion);
-  box-shadow:
-    inset 0 2px 6px rgba(120, 90, 50, 0.14),
-    inset 0 0 0 1px rgba(226, 89, 60, 0.5),
-    0 0 0 1px rgba(226, 89, 60, 0.3);
-}
-
-/* The cedar rail carries the hand along the bottom edge, like a kaiten belt counter. */
-.rail {
-  position: relative;
-  background:
-    repeating-linear-gradient(
-      90deg,
-      rgba(0, 0, 0, 0.08) 0px,
-      rgba(0, 0, 0, 0) 2px,
-      rgba(0, 0, 0, 0) 7px,
-      rgba(0, 0, 0, 0.06) 9px
-    ),
-    linear-gradient(180deg, #e8d3a3 0%, #d9bd8a 100%);
-  border-top: 1px solid rgba(138, 97, 66, 0.4);
-}
-
-/* The belt track: a steel strip riding the top edge, scrolling to suggest the conveyor is running. */
-.rail::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 9px;
-  background:
-    repeating-linear-gradient(90deg, rgba(58, 42, 34, 0.4) 0 4px, transparent 4px 24px),
-    linear-gradient(180deg, #d7dadb 0%, #a9b0b3 100%);
-  background-size:
-    24px 100%,
-    100% 100%;
-  border-bottom: 1px solid rgba(58, 42, 34, 0.3);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
-  animation: belt-scroll 3.6s linear infinite;
-}
-
-.gold-rule {
-  background: linear-gradient(90deg, rgba(201, 150, 42, 0) 0%, rgba(201, 150, 42, 0.55) 12%, rgba(201, 150, 42, 0.55) 88%, rgba(201, 150, 42, 0) 100%);
-}
-
 .display {
-  font-family: var(--font-mincho), ui-serif, serif;
+  font-family: var(--font-display), ui-rounded, ui-sans-serif, system-ui, sans-serif;
 }
 
-/* One authored moment: a drafted card settles into its well. */
+/* A plush object: flat fill, full ink outline, solid block of ink for depth. */
+.plush {
+  background: var(--card);
+  border-radius: 1.25rem;
+  box-shadow:
+    inset 0 0 0 3px var(--ink),
+    0 5px 0 rgba(47, 62, 68, 0.22);
+}
+
+/* A compartment pressed into the ground rather than sitting on it. */
+.well {
+  background: var(--well);
+  border-radius: 1.125rem;
+  box-shadow: inset 0 0 0 3px var(--ink);
+}
+
+/* One card away from a set: the well outlines in coral instead of ink. */
+.well-threat {
+  background: #f6ded4;
+  box-shadow: inset 0 0 0 3px var(--coral);
+}
+
+/* The rail the hand rides on, along the bottom edge. */
+.rail {
+  background: var(--card);
+  box-shadow:
+    inset 0 3px 0 var(--ink),
+    0 -6px 0 rgba(47, 62, 68, 0.1);
+}
+
+/* Buttons are plush too — the offset is the affordance, and pressing flattens it. */
+.btn {
+  border-radius: 999px;
+  color: var(--on-coral);
+  background: var(--coral);
+  box-shadow:
+    inset 0 0 0 3px var(--ink),
+    0 5px 0 var(--ink);
+  transition:
+    transform 120ms ease-out,
+    box-shadow 120ms ease-out;
+}
+
+.btn:active:not(:disabled) {
+  transform: translateY(5px);
+  box-shadow:
+    inset 0 0 0 3px var(--ink),
+    0 0 0 var(--ink);
+}
+
+.btn:disabled {
+  background: var(--well);
+  color: var(--ink-faint);
+  box-shadow:
+    inset 0 0 0 3px var(--ink-faint),
+    0 5px 0 rgba(47, 62, 68, 0.15);
+}
+
+.btn-quiet {
+  background: var(--card);
+  color: var(--ink);
+}
+
+/* A drafted card lands in its well with a short squash — plush settles, it does not bounce. */
 @keyframes seat {
-  from {
-    transform: translateY(-10px) scale(1.04);
+  0% {
+    transform: translateY(-10px) scaleY(1.06);
     opacity: 0;
   }
-  to {
-    transform: translateY(0) scale(1);
+  60% {
+    transform: translateY(0) scaleY(0.94);
     opacity: 1;
+  }
+  100% {
+    transform: translateY(0) scaleY(1);
   }
 }
 
 .seat {
-  animation: seat 320ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: seat 280ms cubic-bezier(0.33, 1, 0.68, 1) both;
 }
 
 @keyframes lamp {
-  0%, 100% { opacity: 0.45; }
-  50% { opacity: 1; }
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.35);
+    opacity: 1;
+  }
 }
 
 .lamp {
-  animation: lamp 1.8s ease-in-out infinite;
-}
-
-@keyframes belt-scroll {
-  from { background-position: 0 0, 0 0; }
-  to { background-position: -24px 0, 0 0; }
+  animation: lamp 1.6s ease-in-out infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .seat,
-  .lamp,
-  .rail::before {
+  .lamp {
     animation: none;
   }
 }
 
 /* Browser surfaces belong to the design system too. */
 ::selection {
-  background: var(--vermilion);
-  color: var(--accent-ink);
+  background: var(--coral);
+  color: var(--on-coral);
 }
 
 :root {
-  caret-color: var(--gold);
-  accent-color: var(--vermilion);
+  caret-color: var(--coral);
+  accent-color: var(--coral);
   color-scheme: light;
-  scrollbar-color: var(--cedar) var(--lacquer-deep);
+  scrollbar-color: var(--ink) var(--well);
   scrollbar-width: thin;
 }
 
 ::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+  width: 12px;
+  height: 12px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--lacquer-deep);
+  background: var(--well);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--cedar);
-  border: 2px solid var(--lacquer-deep);
+  background: var(--ink);
+  border: 3px solid var(--well);
   border-radius: 999px;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: var(--cedar-light);
-}
-
 :focus-visible {
-  outline: 2px solid var(--gold-bright);
-  outline-offset: 2px;
+  outline: 3px solid var(--coral);
+  outline-offset: 3px;
+  border-radius: 4px;
 }
