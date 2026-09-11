@@ -53,6 +53,10 @@ body {
   font-family: var(--font-display), ui-rounded, ui-sans-serif, system-ui, sans-serif;
 }
 
+.display-jp {
+  font-family: var(--font-display-jp), var(--font-display), ui-rounded, ui-sans-serif, system-ui, sans-serif;
+}
+
 /* A plush object: flat fill, full ink outline, solid block of ink for depth. */
 .plush {
   background: var(--card);

@@ -63,8 +63,17 @@ export function RoundSummary({
     <div className="flex min-h-screen flex-col items-center px-4 py-8 sm:px-6">
       <div className="w-full max-w-3xl">
         <div className="flex items-start justify-between gap-3">
-          <h2 className="display text-5xl leading-none font-black tracking-tight sm:text-6xl" style={{ color: "var(--ink)" }}>
-            {isGameEnd ? "Dessert" : `Round ${["I", "II", "III"][roundIndex]} scored`}
+          <h2 className="leading-none">
+            <span className="display-jp block text-4xl font-black tracking-tight sm:text-5xl" style={{ color: "var(--ink)" }}>
+              {isGameEnd
+                ? "ごちそうさまでした！"
+                : `${["先附", "寿司握り"][roundIndex]} スコア確定`}
+            </span>
+            <span className="display mt-1 block text-base font-semibold tracking-wide" style={{ color: "var(--ink-soft)" }}>
+              {isGameEnd
+                ? "Gochisousama deshita!"
+                : `${["Sakizuke", "Sushi Nigiri"][roundIndex]} Sukoa Kakutei`}
+            </span>
           </h2>
           <div className="mt-2 flex shrink-0 items-center gap-1.5 sm:gap-2">
             <Settings />

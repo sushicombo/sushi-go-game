@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Fredoka, Nunito } from "next/font/google";
+import { Fredoka, Nunito, Kosugi_Maru } from "next/font/google";
 import "./globals.css";
 import { ClickSound } from "@/components/ClickSound";
 
@@ -8,6 +8,13 @@ const display = Fredoka({
   variable: "--font-display",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
+});
+
+/** Kosugi Maru is the closest rounded feel to Fredoka that also covers Japanese glyphs. */
+const displayJp = Kosugi_Maru({
+  variable: "--font-display-jp",
+  subsets: ["latin"],
+  weight: "400",
 });
 
 /** Nunito takes the prose: rounded enough to belong, quiet enough to read at length. */
@@ -23,7 +30,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${display.variable} ${body.variable} h-full antialiased`}>
+    <html lang="en" className={`${display.variable} ${displayJp.variable} ${body.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
         <ClickSound />
         {children}
